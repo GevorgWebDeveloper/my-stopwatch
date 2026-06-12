@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html lang="hy">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ժամանակաչափ</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;600&display=swap');
+        
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            background: radial-gradient(circle at center, #1b2735 0%, #090a0f 100%);
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+        .container {
+            padding: 40px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 30px;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            text-align: center;
+            width: 350px;
+        }
+        h1 { font-size: 1.5rem; margin-bottom: 20px; color: #a0c4ff; letter-spacing: 2px; }
+        #display { font-size: 3.5rem; font-weight: 600; margin: 20px 0; font-family: monospace; }
+        .buttons { display: flex; gap: 10px; justify-content: center; }
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        #start { background: #4ecca3; color: #1a1a2e; }
+        #stop { background: #ff6b6b; color: white; }
+        #reset { background: #555; color: white; }
+        button:hover { transform: scale(1.05); }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>ԺԱՄԱՆԱԿԱՉԱՓ</h1>
+        <div id="display">00:00:00</div>
+        <div class="buttons">
+            <button id="start">ՍԿՍԵԼ</button>
+            <button id="stop">STOP</button>
+            <button id="reset">RESET</button>
+        </div>
+    </div>
+
+    <script>
+        let startTime, elapsedTime = 0, timerInterval;
+        const display = document.getElementById('display');
+
+        function updateDisplay() {
+            let totalMilliseconds = elapsedTime;
+            let minutes = Math.floor(totalMilliseconds / 60000);
+            let seconds = Math.floor((totalMilliseconds % 60000) / 1000);
+            let centiseconds = Math.floor((totalMilliseconds % 1000) / 10);
+            display.innerText = 
+                `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}:${centiseconds.toString().padStart(2, '0')}`;
+        }
+
+        document.getElementById('start').addEventListener('click', () => {
+            startTime = Date.now() - elapsedTime;
+            timerInterval = setInterval(() => {
+                elapsedTime = Date.now() - startTime;
+                updateDisplay();
+            }, 10);
+        });
+
+        document.getElementById('stop').addEventListener('click', () => clearInterval(timerInterval));
+        document.getElementById('reset').addEventListener('click', () => {
+            clearInterval(timerInterval);
+            elapsedTime = 0;
+            updateDisplay();
+        });
+    </script>
+</body>
+</html>
